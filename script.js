@@ -47,8 +47,9 @@ let verSubjects = [
 ];
 
 let verbs = [];
+let words = ["","",""];
 
-let ignoreList = ["you","him","they","do","is","a","an","the","this","that"];
+let ignoreList = ["you","him","they","do","is","a","an","the","this","that","to","go"];
 
 for(i = 0; i < objectWordList.length; i++){
   objects.push(Object(objectWordList[i]), i)
@@ -59,12 +60,13 @@ for(i = 0; i < subjectWordList.length; i++){
 }
 
 for(i = 0; i < verbWordList.length; i++){
-  verbs.push(Verb(verbWordList[i]), i, verNeedObject[i]verSubjects[i])
+  verbs.push(Verb(verbWordList[i]), i, verNeedObject[i],verSubjects[i])
 }
 
-let input = "";
-let inputList = input.split(" ");
-var qi = 0;
+let input = "Go use rifle to attack enemy";
+input = input.toLowerCase();
+let inputArray = input.split(" ");
+var i = 0;
 
 while(true){
   if (i >= inputArray.length){
@@ -77,4 +79,14 @@ while(true){
   }
 }
 
+console.log(inputArray);
 
+
+for(i = 0; i < inputArray.length; i++){
+  if (verbWordList.includes(inputArray[i])){
+    words[0] = verbs[verbWordList.indexOf(inputArray[i])];
+    break;
+  }
+}
+
+console.log(words);
