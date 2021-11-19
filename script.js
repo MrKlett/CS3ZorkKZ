@@ -49,21 +49,23 @@ let verSubjects = [
 let verbs = [];
 let words = ["","",""];
 
-let ignoreList = ["you","him","they","do","is","a","an","the","this","that","to","go"];
+let ignoreList = ["you","her","him","she","he","they","do","is","a","an","the","this","that","to","go", "with","using"];
+
+let errors = ["No Verb", "No Subject", "No Object"];
 
 for(i = 0; i < objectWordList.length; i++){
-  objects.push(Object(objectWordList[i]), i)
+  objects.push(new Object(objectWordList[i], i));
 }
 
 for(i = 0; i < subjectWordList.length; i++){
-  subjects.push(Subject(subjectWordList[i]), i, subObjects[i])
+  subjects.push(new Subject(subjectWordList[i], i, subObjects[i]));
 }
 
 for(i = 0; i < verbWordList.length; i++){
-  verbs.push(Verb(verbWordList[i]), i, verNeedObject[i],verSubjects[i])
+  verbs.push(new Verb(verbWordList[i], i, verNeedObject[i],verSubjects[i]));
 }
 
-let input = "Go use rifle to attack enemy";
+let input = "attack enemey with rifle";
 input = input.toLowerCase();
 let inputArray = input.split(" ");
 var i = 0;
@@ -84,9 +86,101 @@ console.log(inputArray);
 
 for(i = 0; i < inputArray.length; i++){
   if (verbWordList.includes(inputArray[i])){
-    words[0] = verbs[verbWordList.indexOf(inputArray[i])];
+    words[0] = verbWordList.indexOf(inputArray[i]);
     break;
   }
 }
 
+var i = 0;
+
+while(true){
+  if (i >= inputArray.length){
+    break;
+  }
+  if (verbWordList.includes(inputArray[i])){
+    inputArray.splice(i, 1);
+  }else{
+    i++;
+  }
+}
+
+for(i = 0; i < inputArray.length; i++){
+  if (subjectWordList.includes(inputArray[i])){
+    words[1] = subjectWordList.indexOf(inputArray[i]);
+    break;
+  }
+}
+
+while(true){
+  if (i >= inputArray.length){
+    break;
+  }
+  if (subjectWordList.includes(inputArray[i])){
+    inputArray.splice(i, 1);
+  }else{
+    i++;
+  }
+}
+
+for(i = 0; i < inputArray.length; i++){
+  if (objectWordList.includes(inputArray[i])){
+    words[2] = objectWordList.indexOf(inputArray[i]);
+    break;
+  }
+}
+
+while(true){
+  if (i >= inputArray.length){
+    break;
+  }
+  if (objectWordList.includes(inputArray[i])){
+    inputArray.splice(i, 1);
+  }else{
+    i++;
+  }
+}
+
 console.log(words);
+
+var err = 0;
+
+if (words[0] != ""){
+  console.log(verbs[words[0]].word);
+}else{
+  err = 1;
+}
+
+if(words[1] != ""){
+  console.log(subjects[words[1]].word);
+}else{
+  if(err == 0){
+    err = 2;
+  }
+}
+
+if (words[2] != ""){
+  console.log(objects[words[2]].word);
+}
+
+try{
+  if (words[2] != "" && verbs[words[0]].needObject != 0){
+    //fatal: if verb and object both dont exist, error message appears. 
+    if(err == 0){
+      err = 3;
+    }
+  }
+}catch(error){
+  if(err == 0){
+    err = 3;
+  }
+}
+
+if (err != 0){
+
+  if (inputArray[0] != undefined){
+    console.log("Don't understand " + inputArray[0]);
+  }
+  else{
+    console.log(errors[err-1])
+  }
+}
