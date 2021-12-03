@@ -163,7 +163,7 @@ if (words[2] != ""){
 }
 
 try{
-  if (words[2] != "" && verbs[words[0]].needObject != 0){
+  if (words[2] == "" && verbs[words[0]].needObject != 0){
     //fatal: if verb and object both dont exist, error message appears. 
     if(err == 0){
       err = 3;
